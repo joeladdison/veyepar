@@ -27,4 +27,4 @@ dj/scripts/schedules/
 archive/
 .idea
 __pycache__/
-
+.venv/
