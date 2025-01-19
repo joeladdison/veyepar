@@ -26,16 +26,20 @@ MEDIA_URL = "https://veyepar.nextdayvideo.com/Videos/veyepar/"
 UPLOAD_FORMATS = ['mp4',]
 
 MANAGERS = ADMINS
-DATABASES =  {'default': {'ENGINE': 'django.db.backends.sqlite3',
- 'HOST': '',
- 'NAME': os.path.join(BASE_DIR,'veyepar.db'),
- 'OPTIONS': {},
- 'PASSWORD': '',
- 'PORT': '',
- 'TEST_CHARSET': None,
- 'TEST_COLLATION': None,
- 'TEST_NAME': None,
- 'USER': ''} }
+DATABASES =  {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'HOST': '',
+        'NAME': os.path.join(BASE_DIR,'veyepar.db'),
+        'OPTIONS': {},
+        'PASSWORD': '',
+        'PORT': '',
+        'TEST_CHARSET': None,
+        'TEST_COLLATION': None,
+        'TEST_NAME': None,
+        'USER': ''
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

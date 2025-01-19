@@ -7,6 +7,7 @@ from .views import *
 urlpatterns = [
     path(r'', main, name='main'),
     re_path(r'start/$', start_here, name='start_here'),
+    re_path(r'start/(?P<client_slug>[-\w]+)/(?P<show_slug>[-\w]+)/$', start_here, name='start_here_show'),
     re_path(r'clients/$', clients, name='clients'),
     re_path(r'locations/$', locations, name='locations'),
     re_path(r'C/(?P<client_slug>[-\w]+)/$', client, name='client'),

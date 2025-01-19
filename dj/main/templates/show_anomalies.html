@@ -3,7 +3,7 @@
 
 {% block content %}
 
-
+<p>
 <a href="{% url "client" client.slug %}">{{ client.name }}</a>
 <a href="{% url "episode_list" client.slug show.slug%}">{{ show.name }}</a>
 </p>
@@ -19,7 +19,8 @@
     <td>
         <a href="{% url "slugoh" show.id%}?slugoh">slug oh!</a>
         <a href="{% url "slugoh" show.id%}?titleoh">title oh!</a>
-    </tr>
+    </td>
+</tr>
 
 <tr>
 <td>
@@ -34,7 +35,8 @@
 </td>
 <td>
     <a href="{% url "raw_file_audio" %}?show_id={{show.id}}">raw_file_audio</a>
-    <a href="{% url "final_file_audio" %}?show_id={{show.id}}">final_file_audio</a></td>
+    <a href="{% url "final_file_audio" %}?show_id={{show.id}}">final_file_audio</a>
+</td>
 <td>
     <a href="{% url "mini_conf" %}?show_id={{show.id}}">mini_conf</a>
     <a href="{% url "admin:main_cut_list_changelist" %}?episode__show__id__exact={{show.id}}">Show cut list</a>

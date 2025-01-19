@@ -31,7 +31,7 @@ class Episode_Form_Preshow(forms.ModelForm):
         if 'locations' in kwargs:
            del kwargs['locations']
         super(Episode_Form_Preshow, self).__init__(*args, **kwargs)
-        self.fields['location']._set_choices([(l.id, l.name) for l in locations])
+        self.fields['location'].choices = [(l.id, l.name) for l in locations]
 
     class Meta:
         model = Episode

@@ -188,14 +188,19 @@ def test_rfxml(request):
     return response
 
 
-def start_here(request):
+def start_here(request, client_slug=None, show_slug=None):
     """
     landing page for someone who has never been here before
     and wants to help.
     """
 
+    if not client_slug or not show_slug:
+        # Show welcome page only
+        return render(request, 'start_here.html')
+
+    #client=get_object_or_404(Client, slug=client_slug)
     show=get_object_or_404(Show,
-            client__slug='eric',slug='write_docs_na_2016')
+            client__slug=client_slug,slug=show_slug)
     episodes = Episode.objects.filter(show=show,
             location__active=True,
             state=1,

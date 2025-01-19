@@ -16,7 +16,10 @@ start
     <img alt="recording sheet" src="{{MEDIA_URL}}/{{client.slug}}/{{show.slug}}/img/{{img.filename}}" width=800 border="5" style="border-color: gray" >
   </br>
   <form method="POST">{% csrf_token %}{{ iefs.management_form }}
-      <table>{{form}} </table><input type="submit" value="{{user.is_authenticated|yesno:"Save,not logged in,"}}" />
+      <table>
+        {{form.as_table}}
+      </table>
+      <input type="submit" value="{{user.is_authenticated|yesno:"Save,not logged in,"}}" />
   </form>
   </br>
     {{img.text}}

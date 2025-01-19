@@ -17,7 +17,7 @@
             <td><a href="{% url "admin:main_show_change" show.id%}">{{show.id}}</a></td>
             <td><a href="{% url "episode_list" client.slug show.slug%}">{{ show.name }}</a></td>
             {% include "show_shortcuts.html" %}
-
+        </tr>
         {% endfor %}
     </table>
 
@@ -26,7 +26,7 @@
      <form action="" method="POST">{% csrf_token %}
      <table border=1>
        <tr><td colspan="2"><input type="submit" value="Save" /></td></tr>
-       {{ show_form }}
+       {{ show_form.as_table }}
        <tr><td colspan="2"><input type="submit" value="Save" /></td></tr>
      </table>
      </form>
