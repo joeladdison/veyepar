@@ -1230,10 +1230,12 @@ class add_eps(process.process):
 'other',
 'lunch',
 'dinner',
+'Dinner',
 'penguin dinner',
 'Professional Delegates Networking Sessions (PDNS)',
 'nothing',
 'room changeover',
+'Room Changeover',
 'off-site',
 'free time',
                 )
@@ -1308,6 +1310,8 @@ class add_eps(process.process):
                     event['start'], '%Y-%m-%dT%H:%M:%S' )
 
             event['duration'] =   "0:{}:0".format(event['duration'])
+
+            event['conf_meta'] = ''
 
             if event['raw']['kind'] in special_video_types:
 
