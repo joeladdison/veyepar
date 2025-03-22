@@ -8,6 +8,7 @@ import re
 
 from django import forms
 from django import urls
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save
 
@@ -431,7 +432,7 @@ class Episode(models.Model):
         return location_slug
 
     def approve_url(self):
-        url = "https://veyepar.nextdayvideo.com/main/approve/{id}/{slug}/{edit_key}/".format(id=self.id, slug=self.slug, edit_key=self.edit_key)
+        url = "{site_url}/main/approve/{id}/{slug}/{edit_key}/".format(site_url=settings.SITE_URL, id=self.id, slug=self.slug, edit_key=self.edit_key)
         return url
 
     def composed_description(self):

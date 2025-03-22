@@ -1,13 +1,14 @@
-# rework.py - looks up a public url, 
+# rework.py - looks up a public url,
 # returns the edit page
 # or if an email is passed to:
 #  sets state to edit,
 #  appends the email to the list of emails
-#  prints some text to send 
+#  prints some text to send
 
-import subprocess 
+import subprocess
 import pprint
 
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.core.urlresolvers import reverse
 
@@ -22,15 +23,15 @@ class Command(BaseCommand):
 
 
         def one_arg(self, arg, email=None):
-            
+
             """
                 eps = Episode.objects.filter(conf_url__in=urls)
                 print len(urls), eps.count()
-                for url in urls: 
+                for url in urls:
                     eps = Episode.objects.filter(conf_url=url)
-                    if eps: 
+                    if eps:
                         ep = eps[0]
-                        url = "http://veyepar.nextdayvideo.com" + \
+                        url = settings.SITE_URL + \
                             ep.get_absolute_url()
                         if ep.state:
 
@@ -39,7 +40,7 @@ class Command(BaseCommand):
                                 email = args[1]
                                 ep.add_email(email)
 
-                            edit_url = "http://veyepar.nextdayvideo.com" + \
+                            edit_url = settings.SITE_URL + \
                                 reverse( "approve_episode", args= [
                                     ep.id, ep.slug, ep.edit_key ] )
                             print edit_url
@@ -56,7 +57,7 @@ class Command(BaseCommand):
             """
 
             # veyepar URL
-            if arg.startswith("http://veyepar.nextdayvideo.com"):
+            if arg.startswith(settings.SITE_URL):
                 print("not implemented yet.")
 
 
@@ -102,11 +103,10 @@ class Command(BaseCommand):
                 print(url)
                 qps="?client=fosdem&show=fosdem_2014&location_slug=%s&date=%s-02-0%s" %( location_slug, year, day )
                 print(qps)
-                url = "http://veyepar.nextdayvideo.com" + \
-                        url + qps
+                url = settings.SITE_URL + url + qps
                 print(url)
                 subprocess.Popen(['firefox', url])
-                url = "http://veyepar.nextdayvideo.com/main/rf_set/%s/?start_date=%s-02-0%s" % ( location_slug, year, day )
+                url = "%s/main/rf_set/%s/?start_date=%s-02-0%s" % ( settings.SITE_URL, location_slug, year, day )
                 print(url)
                 subprocess.Popen(['firefox', url])
 
@@ -116,8 +116,7 @@ class Command(BaseCommand):
             for ep in eps:
                 print(ep)
                 print("current state:", ep.state)
-                url = "http://veyepar.nextdayvideo.com" + \
-                        ep.get_absolute_url()
+                url = settings.SITE_URL + ep.get_absolute_url()
                 subprocess.Popen(['firefox', url])
                 if len(args)==2 and args[1]: # empty email doesn't count
                     edit_url = reverse( "approve_episode", args= [
@@ -134,18 +133,18 @@ class Command(BaseCommand):
                     ep.add_email(email)
                     print(email)
                     print("""
-Here is the URL someone can use to make the fix: 
-http://veyepar.nextdayvideo.com/%s
+Here is the URL someone can use to make the fix:
+%s/%s
 Once that happens, the system will encode, upload and send an email to:
 %s
 
 Feel free to reply with questions, we are still working out this process.
-""" % (edit_url, args[1] ))
+""" % ( settings.SITE_URL, edit_url, args[1] ))
 
 
         def handle(self, *args, **options):
             print(args)
-            
+
             # ignore blank parameters
             if not args[0]: return
 
@@ -159,7 +158,3 @@ Feel free to reply with questions, we are still working out this process.
             else:
                 for url in args:
                     self.one_arg(url)
-
-             
-                
-

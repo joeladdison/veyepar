@@ -81,6 +81,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 from dateutil.parser import parse
 # import dateutil
+from django.conf import settings
 from django.utils.html import strip_tags
 from django.template.defaultfilters import slugify
 
@@ -582,8 +583,7 @@ class add_eps(process.process):
 
                     print('veyepar #id name: #%s %s' % (
                             episode.id, episode.name))
-                    host= "veyepar.nextdayvideo.com"
-                    print("http://%s/main/E/%s/" % ( host, episode.id, ))
+                    print("%s/main/E/%s/" % ( settings.SITE_URL, episode.id, ))
                     print(episode.conf_key, episode.conf_url)
                     if self.options.verbose:
                         pprint( diff_fields )

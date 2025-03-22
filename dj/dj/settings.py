@@ -21,7 +21,8 @@ ADMINS = (
 STATIC_ROOT =  BASE_DIR / "static"
 STATIC_URL = "/static/"
 
-MEDIA_URL = "https://veyepar.nextdayvideo.com/Videos/veyepar/"
+SITE_URL = os.environ.get("VEYEPAR_SITE_URL", "https://veyepar.nextdayvideo.com")
+MEDIA_URL = os.environ.get("VEYEPAR_MEDIA_URL", "https://veyepar.nextdayvideo.com/Videos/veyepar/")
 
 UPLOAD_FORMATS = ['mp4',]
 
@@ -75,7 +76,7 @@ USE_I18N = True
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '_)n%2id#&ke+^q_si_9c^v(+d9o6$&6kp*&s*w2sl$%esyx4$v'
+SECRET_KEY = os.environ.get("VEYEPAR_SECRET_KEY", '_)n%2id#&ke+^q_si_9c^v(+d9o6$&6kp*&s*w2sl$%esyx4$v')
 
 LOGIN_URL = '/accounts/login'
 # LOGIN_REDIRECT_URL = '/main'
@@ -99,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                'django_settings_export.settings_export',
             ],
            'debug':True,
            'string_if_invalid':'error-in-template',
@@ -164,6 +166,11 @@ REST_FRAMEWORK = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Settings in this list are available for use within templates.
+SETTINGS_EXPORT = [
+    'SITE_URL'
+]
 
 try:    from dj.local_settings import *
 except ImportError:    pass

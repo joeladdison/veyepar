@@ -68,3 +68,5 @@ icalendar
 pymediainfo
 
 mwparserfromhell
+
+django-settings-export
