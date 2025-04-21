@@ -1,0 +1,3 @@
+# Track these normally excluded files as they are constant for the container
+!local_settings.py
+!veyepar.cfg

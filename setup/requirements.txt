@@ -70,3 +70,5 @@ pymediainfo
 mwparserfromhell
 
 django-settings-export
+
+paramiko

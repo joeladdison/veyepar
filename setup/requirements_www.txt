@@ -1,10 +1,10 @@
 Django
 django-extensions
 djangorestframework
+gunicorn
 pycairo
 pycaption
 PyExifTool
-PyGObject
 pymediainfo
 pytz
 reportlab
