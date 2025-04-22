@@ -7,7 +7,7 @@ sudo apt-get --assume-yes install software-properties-common
 sudo apt-add-repository --yes ppa:gstreamer-developers/ppa
 
 sudo apt-get --assume-yes install \
-    virtualenvwrapper python-pip python-psycopg2 \
+    virtualenvwrapper python-pip python3-psycopg \
     git-core vim screen tmux \
     imagemagick python-imaging inkscape ffmpeg2theora \
     python-gi python3-gi gstreamer1.0-tools gir1.2-gstreamer-1.0 \
@@ -52,7 +52,7 @@ nameserver 8.8.8.8
 
 wget --no-check-certificate -N http://github.com/CarlFK/veyepar/raw/master/INSTALL.sh ; chmod u+x INSTALL.sh ; ./INSTALL.sh
 
-pip install psycopg2
+pip install psycopg[binary]
 sudo apt-get install sshfs
 mkdir /home/av/Videos/veyepar/lca
 sshfs av@130.216.0.130:/mnt/barge/lca/ /home/av/Videos/veyepar/lca

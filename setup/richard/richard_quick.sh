@@ -18,7 +18,7 @@ sudo apt-get install \
     git-core \
     nginx \
     python-virtualenv \
-    python-psycopg2 \
+    python3-psycopg \
     postgresql-9.1 \
     postgresql-client-common
 
@@ -96,7 +96,7 @@ server {
     location /static/ {
         break;
     }
-    
+
     location / {
         proxy_pass_header     Server;
         proxy_set_header      Host               $http_host;
@@ -153,7 +153,7 @@ MAX_FEED_LENGTH = 30
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "${SITE_NAME}",
         "USER": "${SITE_NAME}",
         "PASSWORD": "${SITE_NAME}",

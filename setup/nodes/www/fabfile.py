@@ -131,7 +131,7 @@ def setup_supervisor():
     sudo('service supervisor restart')
 
     site_root = join(home_directory(SITE_USER), 'site')
-    upload_template('veyepar.conf', 
+    upload_template('veyepar.conf',
         '/etc/supervisor/conf.d/veyepar.conf',
         context={
             'command': join(site_root, 'bin', 'runserver.sh'),
@@ -171,7 +171,7 @@ def install_site_requirements(virtualenv):
     su('%s/pip install djangorestframework' % vbin)
     su('%s/pip install django_extensions' % vbin)
     su('%s/pip install gunicorn' % vbin)
-    su('%s/pip install psycopg2' % vbin)
+    su('%s/pip install psycopg[binary]' % vbin)
 
 def install_dabo(virtualenv):
     vbin = join(home_directory(SITE_USER), 'venvs', virtualenv, 'bin')
@@ -206,7 +206,7 @@ def deploy_www_root():
 
     with cd(site_root):
         su('mkdir -p logs bin env static')
-        upload_template('runserver.sh', 
+        upload_template('runserver.sh',
             join(bindir, 'runserver.sh'),
             context={
                 'site_version': 'veyepar',
@@ -231,7 +231,7 @@ def setup_postgres():
         require.postgres.database(SITE_USER, SITE_USER, encoding='UTF8', locale='en_US.UTF-8')
     # TODO change default port
     # port = '5%s' % ''.join(random.choice(string.digits) for x in range(4))
-    #sed('/etc/postgresql/9.1/main/postgresql.conf', 'port = 5432', 'port = %s' % port) 
+    #sed('/etc/postgresql/9.1/main/postgresql.conf', 'port = 5432', 'port = %s' % port)
 
 def lockdowns():
     # don't share nginx version in header and error pages
@@ -265,7 +265,7 @@ def install_debian_packages():
         'supervisor',
         'git',
         'postgresql',
-        'python-psycopg2',
+        'python3-psycopg',
         'curl',
         'vim',
         'tmux',
@@ -274,8 +274,6 @@ def install_debian_packages():
         'ack-grep',
         'python3-pip',
     ])
-
-    sudo('apt build-dep -y psycopg2')
 
 
 def install_python_packages():

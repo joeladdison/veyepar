@@ -7,10 +7,10 @@ SHOW=pyconde2011
 DVDIR=~/Videos/dv/room_c
 ROOM=Saal_1C
 
-sudo apt-get install python-psycopg2
+sudo apt-get install python3-psycopg
 
 # gen and copy ssh key to server
-if [ ! -f ~/.ssh/id_rsa.pub ]; then ssh-keygen; fi 
+if [ ! -f ~/.ssh/id_rsa.pub ]; then ssh-keygen; fi
 ssh-copy-id $SERVER.local:
 
 # mount sever under ~/mnt
@@ -35,14 +35,14 @@ python mkdirs.py
 
 # swap local ogv/mp4 output dirs for ones on server
 cd ~/Videos/veyepar/$CLIENT/$SHOW/
-rmdir ogv mp4 
+rmdir ogv mp4
 mv bling bling.local
 ln -s ~/mnt/$SERVER/Videos/veyepar/$CLIENT/$SHOW/ogv
 ln -s ~/mnt/$SERVER/Videos/veyepar/$CLIENT/$SHOW/mp4
 ln -s ~/mnt/$SERVER/Videos/veyepar/$CLIENT/$SHOW/bling
 
 # link local dv dir to dvsmon dv dir
-# need to figure out what location slug dir 
+# need to figure out what location slug dir
 
 cd dv
 rmdir *

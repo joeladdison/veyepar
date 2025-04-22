@@ -22,7 +22,7 @@
 
 - name: pip install db module
   pip:
-    name: psycopg2-binary
+    name: psycopg[binary]
     virtualenv: "{{ app_dir }}/venv"
 
 - name: dabo

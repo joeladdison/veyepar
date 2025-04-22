@@ -2,7 +2,7 @@ django
 djangorestframework
 django-extensions
 python-swiftclient
-psycopg2-binary
+psycopg[binary]
 git+https://github.com/smarnach/pyexiftool.git
 pymediainfo
 numpy

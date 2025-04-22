@@ -4,7 +4,7 @@ ALLOWED_HOSTS = ['{{ domain_name }}', ]
 CSRF_TRUSTED_ORIGINS = ['{{ domain_name }}', ]
 
 DATABASES =  {'default':
-        {'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        {'ENGINE': 'django.db.backends.postgresql',
          'HOST': "{{ db_host }}",
          'NAME': "{{ db_name }}",
          'USER': "{{ db_user }}",

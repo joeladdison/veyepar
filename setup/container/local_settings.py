@@ -13,10 +13,13 @@ CSRF_TRUSTED_ORIGINS = [
     ]
 
 DATABASES =  {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'veyepar',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "veyepar",
+        "USER": "veyepar",
+        "PASSWORD": "veyepar",
+        "HOST": "db",
+        "PORT": "5432",
     }
 }
 

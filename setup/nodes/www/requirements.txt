@@ -2,4 +2,4 @@ django<2
 djangorestframework
 django_extensions
 # gunicorn
-psycopg2
+psycopg[binary]

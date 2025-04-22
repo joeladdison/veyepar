@@ -46,16 +46,16 @@ sudo apt-get --assume-yes install libyaml-dev libjpeg-dev
 # pocketsphinx-utils
 
 # for encoder node
-sudo apt-get --assume-yes install python-psycopg2 inkscape ffmpeg2theora python-imaging python3-venv
+sudo apt-get --assume-yes install python3-psycopg inkscape ffmpeg2theora python-imaging python3-venv
 # python-virtualenv
 
 # virtualenvwrapper
 
-sudo apt-get --assume-yes build-dep python-lxml python-psycopg2
+sudo apt-get --assume-yes build-dep python-lxml python3-psycopg
 # sudo apt-get build-dep python-opencv
 
 # for web server
-# python-psycopg2 python-imaging python-virtualenv virtualenvwrapper
+# python3-psycopg python-imaging python-virtualenv virtualenvwrapper
 # ttf-dejavu-core (for pdfs)
 
 # gstreamer bindings
