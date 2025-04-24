@@ -25,7 +25,8 @@ services:
       # Add veyepar directory for videos.
       - ${HOME}/veyepar:/home/appuser/veyepar
       # Inject veyepar config files
-      - ${PWD}/veyepar.cfg:/veyepar/dj/scripts/veyepar.cfg
+      - ${PWD}/pw.py:/veyepar/scripts/pw.py
+      - ${PWD}/veyepar.cfg:/veyepar/scripts/veyepar.cfg
       - ${PWD}/local_settings.py:/veyepar/dj/local_settings.py
 
   db:

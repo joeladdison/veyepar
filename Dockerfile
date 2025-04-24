@@ -61,4 +61,4 @@ RUN mkdir -p /veyepar/logs && \
     chown -R nginx /veyepar
 
 COPY setup/container/veyepar_nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=veyepar-app --chown=nginx:nginx /static /veyepar/static
+COPY --from=veyepar-app --chown=nginx:nginx /veyepar/static /veyepar/static
