@@ -72,3 +72,7 @@ mwparserfromhell
 django-settings-export
 
 paramiko
+
+# Pin to 3.50.0 until we move to newer Debian
+# See discussion on https://github.com/beeware/toga/issues/3143
+PyGObject==3.50.0

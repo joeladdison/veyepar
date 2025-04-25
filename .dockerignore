@@ -1,0 +1,5 @@
+# Exclude settings/config.
+dj/dj/local_settings.py
+dj/scripts/pw.py
+dj/scripts/veyepar.cfg
+dj/veyepar.db

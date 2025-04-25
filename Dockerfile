@@ -1,5 +1,10 @@
 FROM python:3.13-bookworm AS builder
 
+# Install dependencies for PyGObject and GStreamer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgirepository1.0-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /veyepar
 WORKDIR /veyepar
 
@@ -23,6 +28,20 @@ RUN pip install --no-cache-dir -r requirements_www.txt
 
 # Backend: veyepar under gunicorn.
 FROM python:3.13-bookworm AS veyepar-app
+
+# Install dependencies for PyGObject and GStreamer
+# Include base apps to allow use of gst-discoverer command line tool
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgirepository-1.0-1 \
+    gir1.2-gstreamer-1.0 \
+    gir1.2-gst-plugins-base-1.0 \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-base-apps \
+    gstreamer1.0-tools \
+    gstreamer1.0-libav \
+    && rm -rf /var/lib/apt/lists/*
 
 # Setup non-root user
 RUN useradd -m -r appuser && \
