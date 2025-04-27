@@ -33,8 +33,17 @@ class ts_rf(process):
 
         if self.options.verbose: print(pathname)
 
+        if not os.path.exists(pathname):
+            print('missing file: {}'.format(pathname))
+            if self.options.delete_unknown:
+                rf.delete()
+            return
+
         # print( "tsraw.get_start", (pathname, self.options.time_source ) )
         start = tsraw.get_start(pathname, self.options.time_source )
+        if not start:
+            print(f'Failed to get start time for {pathname}')
+            return
 
         """
         if offset is not None:
@@ -48,11 +57,7 @@ class ts_rf(process):
         else:
             seconds = tsraw.get_duration(pathname)
         """
-        if not os.path.exists(pathname):
-            print('missing file: {}'.format(pathname))
-            if self.options.delete_unknown:
-                rf.delete()
-            return
+
         seconds = tsraw.get_duration(pathname)
 
         print(( pathname, start, seconds ))

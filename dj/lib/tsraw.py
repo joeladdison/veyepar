@@ -49,6 +49,11 @@ def get_start( pathname, time_source ):
     or use the filesystem_create
     """
 
+    # Files can be nested under a folder per day: client/show/dv/loc/yyyy-MM-dd/HH-mm-ss.ext
+    # or all in the top folder: client/show/dv/loc/yyyy-MM-dd HH-mm-ss.ext
+    FILE_TIME_RE = r".*[/\s_](?P<h>\d+)[_-](?P<m>\d+)[_-](?P<s>\d+)\."
+    FILE_DATETIME_RE = r".*/(?P<year>\d+)[_-](?P<month>\d+)[_-](?P<day>\d+).*[/\s_](?P<hour>\d+)[_-](?P<minute>\d+)[_-](?P<second>\d+)"
+
     # 3 ways of getting the datetime this file started
 
     def fs_time(pathname):
@@ -101,10 +106,11 @@ def get_start( pathname, time_source ):
         # print("re_name...")
         # parse string into datetime useing RE
 
-        dt_re = r".*/(?P<year>\d+)-(?P<month>\d+)-(?P<day>\d+).*/(?P<hour>\d+)_(?P<minute>\d+)_(?P<second>\d+)"
+        dt_o = re.match(FILE_DATETIME_RE, pathname)
+        if not dt_o:
+            # Could not retrieve datetime from file name
+            return None
 
-
-        dt_o = re.match(dt_re, pathname)
         dt_parts = dt_o.groupdict()
         print(dt_parts)
 
@@ -143,15 +149,19 @@ def get_start( pathname, time_source ):
         print(pathname)
 
         """
-     If you add an 'audioparse' element (or 'rawaudioparse' in >= 1.9/git
-     master) after filesrc and configure it with the right properties, it
-     should be able to report the duration correctly.
+        If you add an 'audioparse' element (or 'rawaudioparse' in >= 1.9/git
+        master) after filesrc and configure it with the right properties, it
+        should be able to report the duration correctly.
         """
 
         discoverer = GstPbutils.Discoverer()
         d = discoverer.discover_uri('file://{}'.format(pathname))
         tags= d.get_tags()
         dt=tags.get_date_time("datetime")[1]
+
+        if not dt:
+            # Could not retrieve datetime from tags
+            return None
 
         # import code; code.interact(local=locals())
 
@@ -236,10 +246,9 @@ def get_start( pathname, time_source ):
         # try to figure out what to use
         # print("auto...")
 
-        time_re = r".*(?P<h>\d+)_(?P<m>\d+)_(?P<s>\d+)\."
         ext = os.path.splitext(pathname)[1]
 
-        if re.match( time_re, pathname ) is not None:
+        if re.match(FILE_TIME_RE, pathname) is not None:
             start = re_name(pathname)
 
         elif ext == ".dv":
