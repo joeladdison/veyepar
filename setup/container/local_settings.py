@@ -23,6 +23,8 @@ DATABASES =  {
     }
 }
 
+UPLOAD_FORMATS = ['mp4', 'webm']
+
 GOOG_CLIENT_SECRET = "/veyepar/config/client_secret.json"
 GOOG_TOKEN = ""
 GOOG_SCOPES = ""

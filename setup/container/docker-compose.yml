@@ -10,7 +10,7 @@ services:
 
     volumes:
       # Add veyepar directory for videos.
-      - ${HOME}/veyepar:/home/appuser/veyepar
+      - ${HOME}/veyepar:/veyepar/videos
 
     ports:
       - 8000:80
@@ -20,6 +20,16 @@ services:
       context: ../..
       dockerfile: Dockerfile
       target: veyepar-app
+      # By default use UID/GID 1000, unless overridden by environment variables.
+      # You can create a .env file to set the variable values as needed.
+      args:
+        - "UID=${UID:-1000}"
+        - "GID=${GID:-1000}"
+
+
+    environment:
+      - VEYEPAR_SITE_URL=http://localhost:8000
+      - VEYEPAR_MEDIA_URL=http://localhost:8000/videos
 
     volumes:
       # Add veyepar directory for videos.

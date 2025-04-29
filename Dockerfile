@@ -41,12 +41,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gstreamer1.0-plugins-base-apps \
     gstreamer1.0-tools \
     gstreamer1.0-libav \
+    melt \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup non-root user
-RUN useradd -m -r appuser && \
-    mkdir /veyepar && \
-    chown -R appuser /veyepar
+ARG UID=1000
+ARG GID=1000
+
+RUN groupadd -g "${GID}" appuser \
+    && useradd --create-home --no-log-init -u "${UID}" -g "${GID}" appuser \
+    && mkdir /veyepar && \
+    && chown -R appuser /veyepar
 
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
