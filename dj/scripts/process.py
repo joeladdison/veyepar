@@ -321,7 +321,7 @@ class process():
         episode.locked_by = ''
         episode.save()
 
-    def process_ep(self, episode):
+    def process_ep(self, episode: Episode) -> bool | None:
         print("stubby process_ep: #{} state:{} {}".format(
               episode.id, episode.state, episode.name))
         return
@@ -383,7 +383,7 @@ class process():
 
         return True
 
-    def process_eps(self, episodes):
+    def process_eps(self, episodes) -> bool | None:
         # if self.options.verbose: print("process_ep: enter")
 
         ret = None
@@ -481,7 +481,7 @@ class process():
             #    episodes=episodes.filter(start__day=self.options.day)
             self.one_loc(show, loc)
 
-    def work(self):
+    def work(self) -> bool:
         """
         find and process episodes
         """

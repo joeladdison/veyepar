@@ -25,6 +25,7 @@ from main.models import Client, Show, Location, Episode, Raw_File, Cut_List
 class enc(process):
 
     ready_state = 2
+    TITLE_IMAGE_FORMATS = ['png', 'svg']
 
     def mk_title_svg(self, raw_svg, texts):
         """
@@ -303,18 +304,25 @@ class enc(process):
 
         return png_name
 
-    def mk_title(self, episode):
-        # make a title slide
+    def mk_title(self, episode: Episode) -> os.PathLike | None:
+        """
+        Make a title slide for the episode.
+        Uses a custom title slide if provided, otherwise uses the template
+        to create one for the episode.
+        """
 
-        # if we find titles/custom/(slug).svg, use that
-        # else make one from the tempalte
-        custom_svg_name = os.path.join( "..",
-            "custom", "titles", episode.slug + ".svg")
+        title_img = None
+
+        # if we find show_dir/custom/titles/(slug).svg, use that
+        # else make one from the template
+        custom_svg_name = self._custom_title_path(episode, "svg")
         if self.options.verbose: print("custom:", custom_svg_name)
-        abs_path =  os.path.join( self.show_dir, "tmp", custom_svg_name )
-        if self.options.verbose: print("abs:", abs_path)
-        if os.path.exists(abs_path):
-            cooked_svg_name = abs_path
+
+        if os.path.exists(custom_svg_name):
+            cooked_svg_name = custom_svg_name
+            png_name = self._custom_title_path(episode, "png")
+            if os.path.exists(png_name):
+                title_img = png_name
         else:
             svg_name = episode.show.client.title_svg
             # print(svg_name)
@@ -339,22 +347,50 @@ class enc(process):
             # output_base=''.join([ c for c in output_base if ord(c)<128])
             # output_base=output_base.encode('utf-8','ignore')
 
-            cooked_svg_name = os.path.join(
-                self.show_dir, "titles", '{}.svg'.format(episode.slug))
-            open(cooked_svg_name, 'w').write(cooked_svg)
+            cooked_svg_name = self._title_path(episode, "svg")
+            with open(cooked_svg_name, 'w') as svg_file:
+                svg_file.write(cooked_svg)
 
-        png_name = os.path.join( "..",
-            "titles", '{}.png'.format(episode.slug))
+        if not title_img:
+            # Generate the png from the svg
+            png_name = self._title_path(episode, "png")
+            title_img = self.svg2png(cooked_svg_name, png_name, episode)
 
-        abs_path = os.path.join( self.show_dir, "tmp", png_name )
+            if title_img is None:
+                print("missing title png")
+                return False
 
-        title_img = self.svg2png(cooked_svg_name, abs_path, episode)
+        return title_img
 
-        if title_img is None:
-            print("missing title png")
-            return False
+    def _title_path(self, episode: Episode, format: str) -> os.PathLike | None:
+        """
+        Build the path to a generated title image for the episode.
+        Extension can be png or svg.
+        Generated titles are stored at show_dir/titles/(slug).ext
+        """
+        if format not in self.TITLE_IMAGE_FORMATS:
+            print(f"Unknown title image format: {format}")
+            return None
 
-        return png_name
+        file_name = f"{episode.slug}.{format.lower()}"
+
+        image_path = os.path.join(self.show_dir, "titles", file_name)
+        return image_path
+
+    def _custom_title_path(self, episode: Episode, format: str) -> os.PathLike | None:
+        """
+        Build the path to a custom title image for the episode.
+        Extension can be png or svg.
+        Custom titles are stored at show_dir/custom/titles/(slug).ext
+        """
+        if format not in self.TITLE_IMAGE_FORMATS:
+            print(f"Unknown title image format: {format}")
+            return None
+
+        file_name = f"{episode.slug}.{format.lower()}"
+
+        image_path = os.path.join(self.show_dir, "custom", "titles", file_name)
+        return image_path
 
     def get_params(self, episode, rfs, cls):
         """
@@ -364,16 +400,13 @@ class enc(process):
         and cutlist+raw filenames
         """
         def get_title(episode):
-            # if we find show_dir/custom/titles/(slug).svg, use that
-            # else make one from the tempalte
-            custom_png_name = os.path.join(
-                self.show_dir, "custom", "titles", episode.slug + ".png")
+            # Use custom title if available, otherwise generate one.
+            custom_png_name = self._custom_title_path(episode, "png")
             if os.path.exists(custom_png_name):
                 print("found custom:", custom_png_name)
                 title_img = custom_png_name
             else:
                 title_img = self.mk_title(episode)
-
             return title_img
 
         def get_foot(episode):
@@ -798,7 +831,7 @@ progressive=1
         cmd += [dv_path_name]
         return cmd
 
-    def process_ep(self, episode):
+    def process_ep(self, episode: Episode) -> bool:
 
         self.whoami(episode.slug)
 

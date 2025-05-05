@@ -4,20 +4,24 @@
 # used to preview the title slides,
 # enc.py will re-run the same code.
 
-import os
-import subprocess
-
 from enc import enc
 
-from main.models import Client, Show, Location, Episode, Raw_File, Cut_List
+from main.models import Episode
+
 
 class mk_title(enc):
 
     ready_state = None
 
-    def process_ep(self, episode):
-
-        title_img=self.mk_title(episode)
+    def process_ep(self, episode: Episode) -> bool:
+        """
+        Generate title images if required, and optionally display/rsync them.
+        NOTE: Always returns False as the Episode state is not incremented from this action.
+        """
+        title_img = self.mk_title(episode)
+        if not title_img:
+            print(f"Failed to get title image for {episode.slug}")
+            return False
 
         if self.options.rsync:
 
@@ -33,14 +37,13 @@ class mk_title(enc):
                 self.file2cdn(episode.show,
                         "titles/%s.svg" % (episode.slug))
 
-            return
+            return False
 
         if self.options.display:
-            png_name = "{}/titles/{}.png".format(
-                    self.show_dir, episode.slug)
+            png_name = title_img
             self.run_cmd(['display', png_name])
 
-        return False # not sure what this means.. we don't bump state
+        return False
 
     def add_more_options(self, parser):
         parser.add_option('--rsync', action="store_true",
@@ -54,4 +57,3 @@ class mk_title(enc):
 if __name__ == '__main__':
     p=mk_title()
     p.main()
-
