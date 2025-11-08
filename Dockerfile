@@ -50,7 +50,7 @@ ARG GID=1000
 
 RUN groupadd -g "${GID}" appuser \
     && useradd --create-home --no-log-init -u "${UID}" -g "${GID}" appuser \
-    && mkdir /veyepar && \
+    && mkdir /veyepar \
     && chown -R appuser /veyepar
 
 COPY --from=builder /opt/venv /opt/venv
