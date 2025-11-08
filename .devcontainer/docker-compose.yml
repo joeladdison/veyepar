@@ -1,4 +1,4 @@
-version: '3.8'
+# Docker Compose for veyepar devcontainer
 
 services:
   app:
@@ -18,15 +18,19 @@ services:
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
+    environment:
+      - VEYEPAR_SITE_URL=http://localhost:8000
+      - VEYEPAR_MEDIA_URL=http://localhost:8000/videos/
+
   db:
     image: postgres:latest
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: veyepar
+      POSTGRES_DB: veyepar
+      POSTGRES_PASSWORD: veyepar
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
