@@ -135,6 +135,10 @@ class Show(models.Model):
     schedule_url = models.CharField(max_length=235, null=True, blank=True)
     announcement_state = models.IntegerField(null=True, blank=True,
         choices=ANN_STATES, default=ANN_STATES[1][0], )
+
+    credits_img = models.CharField(max_length=30, null=True, blank=True,
+        help_text='Image added to end. Store in show_dir/assets/credits directory.')
+
     @property
     def client_name(self):
         return self.client

@@ -331,7 +331,8 @@ class enc(process):
                     "assets", "titles",
                     svg_name)
 
-            raw_svg = open(template).read()
+            with open(template) as template_file:
+                raw_svg = template_file.read()
 
             # happy_filename = episode.slug.encode('utf-8')
             happy_filename = episode.slug
@@ -410,6 +411,14 @@ class enc(process):
             return title_img
 
         def get_foot(episode):
+            if episode.show.credits_img:
+                # Use the credits image for the show
+                # Show credits image is stored at show_dir/assets/credits/image.ext
+                show_credits_path = os.path.join(self.show_dir, "assets", "credits",
+                                                 episode.show.credits_img)
+                return show_credits_path
+
+            # Fall back to client credits image
             credits_img = episode.show.client.credits
             credits_pathname = os.path.join("..",
                     "assets", "credits", credits_img )
