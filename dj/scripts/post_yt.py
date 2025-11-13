@@ -434,9 +434,10 @@ class post(process):
         if not ep.show.client.youtube_id: youtube_success = True
         else: youtube_success = self.do_yt(ep,files,True,meta)
 
-        # process archive.org
-        if not ep.show.client.archive_id: archive_success = True
-        else: archive_success = self.do_ia(ep,files,meta)
+        if self.options.include_archive:
+            # process archive.org
+            if not ep.show.client.archive_id: archive_success = True
+            else: archive_success = self.do_ia(ep,files,meta)
 
         # process rackspace cdn
         # needs a rackspace account
@@ -463,6 +464,8 @@ class post(process):
         parser.add_option('--update-description', action="store_true",
             help="Just update description of existing upload.")
 
+        parser.add_option('--include-archive', action="store_true",
+            help="Upload to archive.org.")
 
 
 
