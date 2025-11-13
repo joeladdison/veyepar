@@ -12,13 +12,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # add dj/libs
-sys.path.insert(0, BASE_DIR / 'lib')
+sys.path.insert(0, os.path.join(BASE_DIR, 'lib'))
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
-STATIC_ROOT =  BASE_DIR / "static"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
 SITE_URL = os.environ.get("VEYEPAR_SITE_URL", "https://veyepar.nextdayvideo.com")

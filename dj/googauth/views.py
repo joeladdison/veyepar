@@ -49,7 +49,7 @@ def goog_redirect(request):
 
     data = get_some_data(credd=credd)
 
-    file_name = settings.SECRETS_DIR / (data['user']['id'] + ".json")
+    file_name = os.path.join(settings.SECRETS_DIR, data['user']['id'] + ".json")
     data['credd'] = credd
     put_cred(file_name, data)
 

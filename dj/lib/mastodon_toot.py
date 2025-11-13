@@ -209,13 +209,13 @@ def make_parser():
 
     parser.add_argument('--credintials-file', '-c',
             type = Path,
-            default = cred_dir / 'client_creds.json',
+            default = os.path.join(cred_dir, 'client_creds.json'),
             dest="client_creds_file",
             help="Process API key (what needs access to toot.)")
 
     parser.add_argument('--token-file', '-t',
             type = Path,
-            default = cred_dir / 'access_token.json',
+            default = os.path.join(cred_dir, 'access_token.json'),
             dest="access_token_file",
             help="Access token file. (permission from the account owner)")
 

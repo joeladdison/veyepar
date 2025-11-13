@@ -18,6 +18,7 @@ from steve.restapi import Http4xxException
 from add_to_richard import get_video_id
 """
 
+import os
 from process import process
 
 import youtube_v3_uploader
@@ -70,7 +71,7 @@ class mk_public(process):
         if self.options.verbose: print("Setting Youtube to public...")
 
         uploader = youtube_v3_uploader.Uploader()
-        uploader.token_file = settings.SECRETS_DIR / "youtube" / pw.yt[ep.show.client.youtube_id]['filename']
+        uploader.token_file = os.path.join(settings.SECRETS_DIR, "youtube", pw.yt[ep.show.client.youtube_id]['filename'])
 
         playlist_id = ep.show.youtube_playlist_id
 
