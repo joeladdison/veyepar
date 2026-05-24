@@ -313,14 +313,24 @@ class enc(process):
 
         title_img = None
 
-        # if we find show_dir/custom/titles/(slug).svg, use that
+        # if we find show_dir/custom/titles/(slug).svg, or
+        # show_dir/custom/titles/(conf_key).svg, use this,
         # else make one from the template
-        custom_svg_name = self._custom_title_path(episode, "svg")
-        if self.options.verbose: print("custom:", custom_svg_name)
+        custom_svg_name_slug = self._custom_title_path(episode, "svg")
+        custom_svg_name_conf_key = self._custom_title_path(episode, "svg", use_conf_key=True)
 
-        if os.path.exists(custom_svg_name):
-            cooked_svg_name = custom_svg_name
+        if os.path.exists(custom_svg_name_slug):
+            # Use slug file if available.
+            if self.options.verbose: print("custom title:", custom_svg_name_slug)
+            cooked_svg_name = custom_svg_name_slug
             png_name = self._custom_title_path(episode, "png")
+            if os.path.exists(png_name):
+                title_img = png_name
+        elif os.path.exists(custom_svg_name_conf_key):
+            # Use conf key file if available.
+            if self.options.verbose: print("custom title:", custom_svg_name_conf_key)
+            cooked_svg_name = custom_svg_name_conf_key
+            png_name = self._custom_title_path(episode, "png", use_conf_key=True)
             if os.path.exists(png_name):
                 title_img = png_name
         else:
@@ -378,7 +388,7 @@ class enc(process):
         image_path = os.path.join(self.show_dir, "titles", file_name)
         return image_path
 
-    def _custom_title_path(self, episode: Episode, format: str) -> os.PathLike | None:
+    def _custom_title_path(self, episode: Episode, format: str, use_conf_key: bool = False) -> os.PathLike | None:
         """
         Build the path to a custom title image for the episode.
         Extension can be png or svg.
@@ -388,7 +398,7 @@ class enc(process):
             print(f"Unknown title image format: {format}")
             return None
 
-        file_name = f"{episode.slug}.{format.lower()}"
+        file_name = f"{episode.conf_key}.{format.lower()}" if use_conf_key else f"{episode.slug}.{format.lower()}"
 
         image_path = os.path.join(self.show_dir, "custom", "titles", file_name)
         return image_path
