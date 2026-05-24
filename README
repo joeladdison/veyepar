@@ -118,6 +118,13 @@ Set Episode.state to Encode (2)
 enc.py:# encodes to ogg, flv, m4v, webm, mpeg
 adds titles too.
 
+By default encode will use 720p resolution, in mp4 format. You can override the [MLT profile](https://github.com/mltframework/mlt/tree/master/profiles) to change the resolution and frames per second.
+
+```
+# Encode in 1920x1080 30 fps, in mp4 and webm
+$ python enc.py --mlt-profile atsc_1080p_30 --upload-formats "mp4 webm"
+```
+
 11.
 upload
 push.py - sends copy to private cloud stoage.  (currently disabled)
