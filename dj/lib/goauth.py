@@ -51,9 +51,11 @@ def goog_start( client_secret_file, scopes, redirect_uri ):
         # then we well come back here.
         # include_granted_scopes='true',
 
-    return authorization_url
+    # google_auth_oauthlib >= 1.2 auto-generates a PKCE code_verifier by default.
+    # Return it so the caller can store it and pass it back in goog_token().
+    return authorization_url, flow.code_verifier
 
-def goog_token( client_secret_file, scopes, redirect_uri, authorization_response, state):
+def goog_token( client_secret_file, scopes, redirect_uri, authorization_response, state, code_verifier=None):
 
     # after granting access using goggles servers,
     # the google server redirects the local browser to a url on our server.
@@ -66,6 +68,11 @@ def goog_token( client_secret_file, scopes, redirect_uri, authorization_response
         state=state)
 
     flow.redirect_uri = redirect_uri
+
+    # Restore the PKCE code_verifier generated in goog_start() so the token
+    # exchange includes it (required when a code_challenge was sent).
+    if code_verifier:
+        flow.code_verifier = code_verifier
 
     # Use the authorization server's response to derive the o-auth 2.0 tokens.
     flow.fetch_token(authorization_response=authorization_response)
@@ -155,7 +162,7 @@ def wait_for_callback():
     return path
 
 
-def get_token( client_secret_file, scopes, redirect_uri, path ):
+def get_token( client_secret_file, scopes, redirect_uri, path, code_verifier=None ):
 
     authorization_response = path
 
@@ -163,7 +170,7 @@ def get_token( client_secret_file, scopes, redirect_uri, path ):
     qs = parse_qs(parsed.query)
     state = qs['state'][0]
 
-    credd = goog_token( client_secret_file, scopes, redirect_uri, authorization_response, state)
+    credd = goog_token( client_secret_file, scopes, redirect_uri, authorization_response, state, code_verifier=code_verifier)
 
     return credd
 
@@ -267,12 +274,12 @@ def main():
         # interactive authorazation process using google's auth services.
 
         # oAuth2 step 1
-        start_url = goog_start( args.client_secret_file, args.scopes, args.redirect_url )
+        start_url, code_verifier = goog_start( args.client_secret_file, args.scopes, args.redirect_url )
         print( f"Browse to {start_url}" )
 
         # oAuth2 step 2
         path = wait_for_callback()
-        credd = get_token( args.client_secret_file, args.scopes, args.redirect_url, path )
+        credd = get_token( args.client_secret_file, args.scopes, args.redirect_url, path, code_verifier=code_verifier )
 
         # save it for the next run
         put_cred(args.token_file, credd)

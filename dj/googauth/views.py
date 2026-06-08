@@ -23,7 +23,8 @@ REDIRECT_URL = settings.GOOG_REDIRECT_URL #  'http://127.0.0.1:8000/googauth/red
 
 def goog_init(request):
 
-    authorization_url = goog_start( CLIENT_SECRET_FILE, SCOPES, REDIRECT_URL )
+    authorization_url, code_verifier = goog_start( CLIENT_SECRET_FILE, SCOPES, REDIRECT_URL )
+    request.session['oauth_code_verifier'] = code_verifier
 
     return redirect(authorization_url)
 
@@ -35,7 +36,8 @@ def goog_redirect(request):
     # state created in the flow in the callback will be verified
     state = request.GET['state']
 
-    credd = goog_token( CLIENT_SECRET_FILE, SCOPES, REDIRECT_URL, authorization_response, state)
+    code_verifier = request.session.pop('oauth_code_verifier', None)
+    credd = goog_token( CLIENT_SECRET_FILE, SCOPES, REDIRECT_URL, authorization_response, state, code_verifier=code_verifier)
 
     # Save Creds
     # Saving to a file on the local file system.
